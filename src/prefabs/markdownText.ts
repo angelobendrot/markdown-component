@@ -16,18 +16,18 @@ const attributes = {
   icon: Icon.TextInputIcon,
 };
 
-const defaultPlaceholder = `This is some github flavored markdown
+const defaultPlaceholder = `This is some markdown
 
 ${'```'}javascript
 console.log("Hello world!")
 ${'```'}
 
-with a checklist:
+with a quote:
 
-- [x] foo
-  - [ ] bar
-  - [x] baz
-- [ ] bim
+> This is a quote
+
+Here is a link to [Betty Blocks docs](https://docs.bettyblocks.com/).
+
 `
 
 const options = {

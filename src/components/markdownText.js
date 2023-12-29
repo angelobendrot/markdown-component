@@ -10,11 +10,6 @@
       imports: [],
     },
     {
-      label: 'remarkGfm',
-      package: 'npm:remark-gfm@4.0.0',
-      imports: [],
-    },
-    {
       label: 'SyntaxHighlighter',
       package: 'npm:react-syntax-highlighter@15.5.0',
       imports: ['Prism'],
@@ -24,31 +19,35 @@
   jsx: (() => {
     const {
       Markdown: { default: Markdown },
-      remarkGfm: { default: remarkGfm },
       SyntaxHighlighter: { Prism },
     } = dependencies;
+    const { env, useText } = B;
+    const isDev = env === 'dev';
+
+    const parsedContent = useText(options.content);
 
     return (
       <Markdown
-        children={options.content.toString()}
-        remarkPlugins={[remarkGfm]}
+        children={parsedContent}
         components={{
           code(props) {
             const { children, className, node, ...rest } = props;
             const match = /language-(\w+)/.exec(className || '');
 
-            return match ? (
-            <Prism
-              {...rest}
-              PreTag="div"
-              children={String(children).replace(/\n$/, '')}
-              language={match[1]}
-            />
+            const innerComponent = match ? (
+              <Prism
+                {...rest}
+                PreTag="div"
+                children={String(children).replace(/\n$/, '')}
+                language={match[1]}
+              />
             ) : (
-            <code {...rest} className={className}>
-              {children}
-            </code>
+              <code {...rest} className={className}>
+                {children}
+              </code>
             );
+
+            return isDev ? <div>{innerComponent}</div> : innerComponent;
           },
         }}
       />
