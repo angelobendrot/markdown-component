@@ -25,11 +25,17 @@
     const isDev = env === 'dev';
 
     const parsedContent = useText(options.content);
+    const uniqueId = `markdown-${Math.random().toString(36).substr(2, 9)}`;
 
     return (
       <Markdown
         children={parsedContent}
         components={{
+          p: ({ node, ...props }) => (
+            <p {...props} className="MarkdownComponent" data-id={uniqueId}>
+              {props.children}
+            </p>
+          ),
           code(props) {
             const { children, className, node, ...rest } = props;
             const match = /language-(\w+)/.exec(className || '');
